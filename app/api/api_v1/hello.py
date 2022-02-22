@@ -16,7 +16,7 @@ router = APIRouter()
 
 @router.get("/")
 async def index():
-    return {"message": "Hello World"}
+    return {"message": "Hello index"}
 
 
 @router.get("/ttt")

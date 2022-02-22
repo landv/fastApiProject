@@ -14,6 +14,6 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/user/info")
+@router.get("/info")
 async def info():
     return {"message": "Hello info"}

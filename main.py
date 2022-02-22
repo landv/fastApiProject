@@ -7,29 +7,31 @@
 # @Github  : github/landv
 # @Email   : landvcn@qq.com
 # @Desc    :
-
-# 打包命令
-# https://blog.csdn.net/weixin_41916986/article/details/122342035
-# http://kmanong.top/kmn/qxw/form/article?id=11512&cate=56
-# http://mrdoc.zmister.com/project-53/doc-1389/
-# nuitka3 ./main.py --include-plugin-directory=./app --output-dir=./build -o ./build/main
-# https://nuitka.net/doc/user-manual.html#command-line
-# nuitka3 --follow-imports main.py
-# nuitka3 --standalone --follow-import-to=app --nofollow-imports --show-progress main.py
-# nuitka3 --onefile main.py
-# nuitka3 打包速度慢，打包执行总出现错误。
-
-# 使用pyinstaller 进行打包
-# 多文件
-# pyinstaller -D --hidden-import="main"  main.py
-# 避免 pyinstaller -D --hidden-import="main"  main.py
-# 单文件
-# pyinstaller -F --hidden-import="main"  main.py
+from datetime import datetime
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import PlainTextResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from app.logs import log_init
+from app.middleware import middleware_init
+from app.routers import router_init
 
-from app import start_event, shutdown_event, router_init, middleware_init
+
+async def write_log(api=None, msg=None, user='root'):
+    with open("log.log", mode="a", encoding='utf-8') as log:
+        now = datetime.now()
+        log.write(f"时间：{now}    API调用事件：{api}    用户：{user}    消息：{msg}\n")
+
+
+async def start_event():
+    await write_log(msg='系统启动')
+
+
+async def shutdown_event():
+    await write_log(msg='系统关闭')
+
 
 lapp = FastAPI(title="landv_API",
                description="landv平台模块接口文档",
@@ -40,8 +42,27 @@ lapp = FastAPI(title="landv_API",
                # docs_url=None,  # 禁止显示swagger文档
                # openapi_url=None,  # 禁止显示openapi.json
                )
-# # 初始化日志
-# log_init()
+
+
+# 路径请求错误，不返回信息
+# https://fastapi.tiangolo.com/tutorial/handling-errors/
+@lapp.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    return PlainTextResponse(
+        # str(exc.detail),
+        status_code=exc.status_code)
+
+
+# 请求验证错误，不返回信息
+@lapp.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    return PlainTextResponse(
+        # str(exc),
+        status_code=400)
+
+
+# 初始化日志
+log_init()
 #
 # # 加载配置
 # conf_init(app)
@@ -57,7 +78,7 @@ middleware_init(lapp)
 # db_init(app)
 if __name__ == '__main__':
     uvicorn.run(
-        # https://www.cxymm.net/article/qq_43994782/119031998 好吧，骚操作
+        # https://www.cxymm.net/article/qq_43994782/119031998 好吧，骚操作.
         # https://www.uvicorn.org/deployment/
         app='main:lapp',
         # app=lapp,
@@ -65,8 +86,9 @@ if __name__ == '__main__':
         host='0.0.0.0',
         port=8001,
         debug=False,
-        # reload=True,
+        # 开发模式
+        reload=True,
         # 修改项目运行参数，即reload改为False 用于打包
-        reload=False,
-        workers=1
+        # reload=False,
+        # workers=1
     )
