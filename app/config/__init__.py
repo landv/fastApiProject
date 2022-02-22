@@ -8,4 +8,4 @@
 # @Email   : landvcn@qq.com
 # @Desc    : 配置
 
-
+from .config import *

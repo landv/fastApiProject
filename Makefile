@@ -23,6 +23,7 @@ build:
 	pyinstaller -F --hidden-import="main"  main.py
 	upx ./dist/main
 	mv ./dist/main ./dist/fastApiProject
+	cp .env ./dist/.env
 #buildwin:
 #	pyinstaller 无法交叉编译到windows
 #	upx ./dist/main
@@ -48,3 +49,5 @@ rundev:
 	# 运行
 	python main.py
 
+nohup:
+	nohup ./dist/fastApiProject > error.log 2>&1 &

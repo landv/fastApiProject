@@ -8,3 +8,4 @@
 # @Email   : landvcn@qq.com
 # @Desc    : 数据库models
 
+from .user import *

@@ -31,5 +31,4 @@ engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )
 # 创建DBSession类型:
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
+DBSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)

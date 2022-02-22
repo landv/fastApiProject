@@ -7,3 +7,5 @@
 # @Github  : github/landv
 # @Email   : landvcn@qq.com
 # @Desc    : 数据库
+# 这个就是导入这个目录全部
+from .init_db import *
