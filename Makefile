@@ -9,7 +9,7 @@
 # nuitka3 --onefile main.py
 # nuitka3 打包速度慢，打包执行总出现错误。
 
-
+#
 
 # 全部编译
 all:build
@@ -47,3 +47,4 @@ venv:
 rundev:
 	# 运行
 	python main.py
+
