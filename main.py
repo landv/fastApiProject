@@ -13,12 +13,12 @@ from app import create_app
 程序入口
 注意事项：使用pyinstaller进行打包时，需要将reload修改为False。
 """
-lapp = create_app()
+app = create_app()
 if __name__ == '__main__':
     uvicorn.run(
         # https://www.cxymm.net/article/qq_43994782/119031998 好吧，骚操作.
         # https://www.uvicorn.org/deployment/
-        app='main:lapp',
+        app='main:app',
         # app=lapp,
         host='0.0.0.0',
         port=8001,

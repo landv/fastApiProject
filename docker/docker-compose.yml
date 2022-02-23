@@ -1,0 +1,31 @@
+version:"1.0"
+
+services:
+  # Mysql
+  db:
+    container_name: "db"
+    build:
+      ./db/Dockerfile
+    restart: always
+    tty: true
+    ports:
+      - "3306:3306"
+    networks:
+      - local-net
+
+  # fastapi app
+  app:
+    container_name: "app"
+    build:
+      ./app/Dockerfile
+    # 宿主机器端口：容器端口
+    ports:
+      - "8001:8001"
+    networks:
+      - local-net
+
+
+# 容器网络串联，替代link、links
+  networks:
+    local-net:
+      driver: bridge

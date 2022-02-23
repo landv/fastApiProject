@@ -45,3 +45,4 @@ fastApiProject 练习
 - https://github.com/PY-GZKY/fastapi-crawl-admin
 - https://github.com/l2m2/fastapi-vue-admin
 - https://github.com/Linklelo/pear-admin-fastapi
+- https://github.com/hogeline/sample_fastapi
